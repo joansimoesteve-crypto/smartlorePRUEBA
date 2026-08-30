@@ -49,37 +49,62 @@
             width: 100%;
         }
 
-        /* Logo elegante con silueta de ciudad fina por detrás */
-        .logo {
+        /* --- LOGO OFICIAL CON SILUETA DE EDIFICIOS (SKYLINE) Y CAMBIO DINÁMICO --- */
+        .logo-container {
             position: relative;
-            font-size: 1.8rem;
-            font-weight: 800;
-            letter-spacing: -1px;
-            display: flex;
+            display: inline-flex;
             align-items: center;
-            gap: 10px;
-            padding: 10px 0;
-            z-index: 2;
-        }
-        
-        .logo::before {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: -10px;
-            right: -10px;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=400&q=80') center/cover no-repeat;
-            opacity: 0.18;
-            filter: grayscale(100%) brightness(2) drop-shadow(0 0 5px var(--emerald));
-            z-index: -1;
-            border-radius: 4px;
-            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
-            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            padding: 15px 20px;
+            text-decoration: none;
         }
 
-        .logo span.diamond { color: var(--emerald); font-size: 2rem; }
-        .logo span.text { color: var(--text-light); z-index: 2; }
+        .logo-container::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 52%;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 85px;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 100' width='400' height='100'%3E%3C!-- Punto verde inicial --%3E%3Ccircle cx='15' cy='55' r='4' fill='%2300e676'/%3E%3C!-- Línea inicial que se convierte en edificios de diferentes alturas y antenas --%3E%3Cpath d='M15 55 L35 55 L35 35 L42 35 L42 55 L55 55 L55 20 L68 20 L68 55 L85 55 L85 28 L95 18 L105 28 L105 55 L130 55 L130 42 L142 42 L142 55 L165 55 L165 12 L180 12 L180 55 L210 55 L210 25 L225 25 L225 55 L250 55 L250 32 L265 32 L265 55 L290 55 L290 22 L305 10 L320 22 L320 55 L350 55' fill='none' stroke='%2300e676' stroke-width='1.2' stroke-opacity='0.65' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: left center;
+            background-size: contain;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .logo-text {
+            position: relative;
+            font-size: 2.2rem;
+            font-weight: 300;
+            letter-spacing: 2.5px;
+            color: var(--text-light);
+            z-index: 2;
+            padding-left: 10px;
+        }
+
+        .logo-text strong {
+            font-weight: 600;
+            color: var(--text-light);
+            letter-spacing: 1.5px;
+        }
+
+        /* Efecto de cambio dinámico fluido entre Lore y City */
+        #dynamicSuffix {
+            display: inline-block;
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-out {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+
+        .fade-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
 
         /* Menú superior en texto pequeño, blanco y plano (sin desplegable) */
         .nav-links-flat {
@@ -288,7 +313,6 @@
             border-radius: 15px;
         }
         
-        /* Números más visibles y destacados */
         .tendencia-num {
             position: absolute;
             top: -10px;
@@ -308,7 +332,6 @@
             z-index: 2;
         }
 
-        /* Indicadores de puntitos (pills/dots) abajo del movimiento horizontal para pausa/manual */
         .carousel-dots {
             display: flex;
             justify-content: center;
@@ -439,10 +462,9 @@
 
     <header>
         <div class="top-bar">
-            <div class="logo">
-                <span class="diamond">◆</span>
-                <span class="text">SmartLore</span>
-            </div>
+            <a href="#" class="logo-container">
+                <span class="logo-text">Smart<strong id="dynamicSuffix" class="fade-in">Lore</strong></span>
+            </a>
             
             <ul class="nav-links-flat">
                 <li><a href="#">Inicio</a></li>
@@ -659,10 +681,9 @@
     </main>
 
     <footer>
-        <div class="logo">
-            <span class="diamond">◆</span>
-            <span class="text">SmartLore</span>
-        </div>
+        <a href="#" class="logo-container">
+            <span class="logo-text">Smart<strong>Lore</strong></span>
+        </a>
         <div class="footer-links">
             <a href="#">Sobre Nosotros</a>
             <a href="#">Contacto</a>
@@ -674,6 +695,28 @@
             &copy; 2026 SmartLore. Todos los derechos reservados. Redefiniendo el futuro de la gestión urbana.
         </div>
     </footer>
+
+    <script>
+        // Script para la animación fluida de cambio dinámico entre "Lore" y "City"
+        const suffixElement = document.getElementById('dynamicSuffix');
+        const words = ['Lore', 'City'];
+        let currentIndex = 0;
+
+        setInterval(() => {
+            // Animación de salida
+            suffixElement.classList.remove('fade-in');
+            suffixElement.classList.add('fade-out');
+
+            setTimeout(() => {
+                currentIndex = (currentIndex + 1) % words.length;
+                suffixElement.textContent = words[currentIndex];
+                
+                // Animación de entrada
+                suffixElement.classList.remove('fade-out');
+                suffixElement.classList.add('fade-in');
+            }, 500); // Tiempo alineado con la transición CSS (0.5s)
+        }, 3500); // Cambia cada 3.5 segundos
+    </script>
 
 </body>
 </html>
